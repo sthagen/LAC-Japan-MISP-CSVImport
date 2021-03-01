@@ -64,25 +64,26 @@ sample.tsv
 
 const.pyを開き、以下の設定を行います。  
 
-##### ２－１　authkeyの設定
+##### ２－１　MISP接続先
 
-以下の変数に、キーにユーザのメールアドレス、値にauthkeyの形式でdictionary形式で定義します。  
-ここで定義したユーザメールアドレスとインポート対照ファイルのユーザカラムの値が紐付けられ、該当イベントのインポート時にそのユーザのauthkeyが利用されます。  
-対象変数：　MISP_APIKEYS  
+* MISP_URL: MISPが動作しているサーバのＵＲＬ  
+
+##### ２－２　インポート設定
+
+以下の変数に、キーにユーザのメールアドレス、値に当該ユーザでのインポート設定を下記の形式で設定します。
+ここで定義したユーザメールアドレスとインポート対照ファイルのユーザカラムの値が紐付けられ、該当イベントのインポート時にそのユーザのインポート設定が利用されます。  
+対象変数：　IMPORT_CONFIG
 
 ##### 例
 
-    MISP_APIKEYS = {
-    	'sample@misp.user': 'authkey'
-    	,'sample2@misp.user': 'authkey2'
+    IMPORT_CONFIG = {
+    	'sample@misp.user': {
+    		'authkey': 'valid authkey'
+    		,'distribution': 'distribution config constants'
+    		,'threat_level': 'threat level config constants'
+    		,'analysis_level': 'analysis level config constants'
+    	}
     }
-
-##### ２－２　その他のMISP関連定義
-
-* MISP_URL: MISPが動作しているサーバのＵＲＬ  
-* DISTRIBUTION：　インポートイベントのDISTRIBUTION  
-* THREAT_LEVEL：　インポートイベントのTHREAT_LEVEL  
-* ANALYSIS_LEVEL：　インポートイベントのANALYSIS_LEVEL  
 
 #### ３　スクリプトの実行
 
@@ -106,5 +107,5 @@ const.pyを開き、以下の設定を行います。
 * インポート対象のデータ中に、同一イベントタイトルでアトリビュートのcategory/type/valueが全て一致する行が存在する場合、警告が表示され、該当行は無視されます  
 * イベントまたはアトリビュートのタグとして記載されたタグについては、MISPに未登録であればタグとして追加した上で、該当イベントまたはアトリビュートのタグとして設定します。そのため、インポートを実行するユーザには「add tag」の権限が必要です。  
 * アトリビュートのcategory/typeの不一致など、入力データに起因する登録エラーが出力されることがあるため、スクリプトの出力結果については一通り確認してください  
-* インポートファイルにマルチバイト文字を含む場合、ファイルは文字コードはUTF-8で作成してください  
+* インポートファイルにマルチバイト文字を含む場合、ファイルは文字コードはUTF-8(BOMなし)で作成してください  
 * ファイルの各フィールドに改行を含む場合は、該当フィールドを「""」で囲ってください  

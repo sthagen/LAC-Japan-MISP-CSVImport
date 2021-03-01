@@ -64,25 +64,26 @@ Each item is mapped to the MISP event with the following contents.
 
 Open const.py and make the following settings.  
 
-##### 2-1 Setting up authkey
-
-Define in the following variables in dictionary format in the form of authkey to the user's email address and key to the key.  
-The user mail address defined here is associated with the value of the user column in the import control file, and the user's authkey is used when importing the corresponding event.  
-Target variable: MISP_APIKEYS  
-
-##### Example
-
-    MISP_APIKEYS = {
-    'sample@misp.user': 'authkey'
-    , 'sample 2 @ misp.user': 'authkey 2'
-    }
-
-##### 2-2 Other MISP related definitions
+##### 2-1 MISP connection
 
 * MISP_URL: URL of server running MISP  
-* DISTRIBUTION: Distribution of import event  
-* THREAT_LEVEL: Threat level of the import event  
-* ANALYSIS_LEVEL: import event analysis level  
+
+##### 2-2 Import configuration
+
+In the following variables, set the user's mail address as the key and the import setting for the user as the value in the following format.
+The user mail address defined here is associated with the value in the user column of the import control file, and the import setting of that user is used when importing the corresponding event.
+target: IMPORT_CONFIG
+
+##### example
+
+    IMPORT_CONFIG = {
+    	'sample@misp.user': {
+    		'authkey': 'valid authkey'
+    		,'distribution': 'distribution config constants'
+    		,'threat_level': 'threat level config constants'
+    		,'analysis_level': 'analysis level config constants'
+    	}
+    }
 
 #### 3 Running the script
 
@@ -107,5 +108,5 @@ Import sample.tsv
 * For tags described as tags of events or attributes, add them as tags if they are not registered in MISP, then set them as tags of the corresponding event or attribute. Therefore, the user who performs the import needs "add tag" authority.  
 * If there is a line whose attribute / category / type / value all match in the same event title in the data to be imported, a warning is displayed and the corresponding line is ignored  
 * Registration errors due to input data such as inconsistency of attribute category / type may be output, so please check all the output results of the script  
-* When multibyte characters are included in the import file, please make the character code with UTF-8  
+* When multibyte characters are included in the import file, please make the character code with UTF-8(no BOM)  
 * If you want to include line breaks in each field of the file, enclose the corresponding field with ""  
